@@ -85,3 +85,37 @@
   text-underline-offset: 8px;
   color: white;
 }
+
+.list-tools-container {
+  width: 1000px;
+  margin: 16px auto;
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 36px;
+  padding: 16px;
+}
+
+.tool {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+}
+.tool input {
+  border: none;
+  padding: 8px 16px;
+  color: white;
+  background-color: #3e4552;
+  border-radius: 5px;
+}
+.tool input:focus {
+  outline: none;
+}
+.tool button {
+  color: white;
+  border: white 2px solid;
+  border-radius: 5px;
+  padding: 8px;
+}

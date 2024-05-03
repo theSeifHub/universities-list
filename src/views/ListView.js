@@ -1,7 +1,10 @@
 import React from 'react';
 import Title from '../components/Title';
+import ListTools from '../components/ListTools';
 
-function ListView({ list, onClickItem, onDeleteItem }) {
+function ListView({
+  list, onClickItem, onDeleteItem, onSearchList, onResetList, onSortList
+}) {
 
   const handleDelete = (e, name) => {
     const container = e.currentTarget.closest("li");
@@ -13,6 +16,9 @@ function ListView({ list, onClickItem, onDeleteItem }) {
   return (
     <>
       <Title text={"Universities List"} />
+
+      <ListTools onSearch={onSearchList} onSort={onSortList} onReset={onResetList} />
+
       <ul className="list">
         {
           list.map((item) => (

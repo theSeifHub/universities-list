@@ -32,6 +32,12 @@ function App() {
     fetchData();
   }, []);
 
+  const handleSearchList = (keyword) => dispatch({ type: "SEARCH_LIST", payload: keyword });
+
+  const handleSortList = () => dispatch({ type: "SORT_LIST" });
+
+  const handleResetList = () => dispatch({ type: "RESET_LIST" });
+
   const handleItemClick = (univData) => {
     dispatch({ type: "VIEW_UNIVERSITY", payload: univData });
     navigate(`/${univData.domains[0]}`);
@@ -47,7 +53,16 @@ function App() {
       <Routes>
         <Route
           index path="/"
-          element={<ListView list={state.list} onClickItem={handleItemClick} onDeleteItem={handleItemDelete} />}
+          element={
+            <ListView
+              list={state.list}
+              onSearchList={handleSearchList}
+              onSortList={handleSortList}
+              onResetList={handleResetList}
+              onClickItem={handleItemClick}
+              onDeleteItem={handleItemDelete}
+            />
+          }
         />
         <Route path="/:id" element={<DetailsView university={state.viewUniversity} />} />
       </Routes>
