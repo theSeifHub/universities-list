@@ -1,6 +1,12 @@
 export default function reducer(state, action) {
   const localList = JSON.parse(localStorage.getItem("uniList"));
   switch (action.type) {
+    case 'LOADING':
+      return {
+        ...state,
+        loading: action.payload,
+      };
+
     case 'INIT_DATA':
       return {
         ...state,

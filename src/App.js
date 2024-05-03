@@ -9,6 +9,7 @@ function App() {
   const initialState = {
     list: [],
     viewUniversity: null,
+    loading: false,
   };
   const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -16,6 +17,7 @@ function App() {
 
   useEffect(() => {
     const fetchData = async () => {
+      dispatch({ type: "LOADING", payload: true });
       let fetchedData = [];
       const localList = JSON.parse(localStorage.getItem("uniList"));
       if (localList) {
@@ -27,16 +29,29 @@ function App() {
         fetchedData = parsedData;
       }
       dispatch({ type: "INIT_DATA", payload: fetchedData });
+      dispatch({ type: "LOADING", payload: false });
     }
 
     fetchData();
   }, []);
 
-  const handleSearchList = (keyword) => dispatch({ type: "SEARCH_LIST", payload: keyword });
+  const handleSearchList = (keyword) => {
+    dispatch({ type: "LOADING", payload: true });
+    dispatch({ type: "SEARCH_LIST", payload: keyword });
+    dispatch({ type: "LOADING", payload: false });
+  };
 
-  const handleSortList = () => dispatch({ type: "SORT_LIST" });
+  const handleSortList = () => {
+    dispatch({ type: "LOADING", payload: true });
+    dispatch({ type: "SORT_LIST" });
+    dispatch({ type: "LOADING", payload: false });
+  };
 
-  const handleResetList = () => dispatch({ type: "RESET_LIST" });
+  const handleResetList = () => {
+    dispatch({ type: "LOADING", payload: true });
+    dispatch({ type: "RESET_LIST" });
+    dispatch({ type: "LOADING", payload: false });
+  };
 
   const handleItemClick = (univData) => {
     dispatch({ type: "VIEW_UNIVERSITY", payload: univData });
@@ -50,22 +65,26 @@ function App() {
 
   return (
     <div className="app">
-      <Routes>
-        <Route
-          index path="/"
-          element={
-            <ListView
-              list={state.list}
-              onSearchList={handleSearchList}
-              onSortList={handleSortList}
-              onResetList={handleResetList}
-              onClickItem={handleItemClick}
-              onDeleteItem={handleItemDelete}
-            />
-          }
-        />
-        <Route path="/:id" element={<DetailsView university={state.viewUniversity} />} />
-      </Routes>
+      {state.loading ? (
+        <div className="spinner" title="Loading..."></div>
+      ) : (
+        <Routes>
+          <Route
+            index path="/"
+            element={
+              <ListView
+                list={state.list}
+                onSearchList={handleSearchList}
+                onSortList={handleSortList}
+                onResetList={handleResetList}
+                onClickItem={handleItemClick}
+                onDeleteItem={handleItemDelete}
+              />
+            }
+          />
+          <Route path="/:id" element={<DetailsView university={state.viewUniversity} />} />
+        </Routes>
+      )}
     </div>
   );
 }
