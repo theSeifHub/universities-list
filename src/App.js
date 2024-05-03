@@ -1,9 +1,18 @@
 import React, { useEffect, useReducer } from "react";
-import './App.css';
+import { Routes, Route, useNavigate } from "react-router-dom";
+import './styles/App.css';
 import reducer from "./reducer";
+import ListView from "./views/ListView";
+import DetailsView from "./views/DetailsView";
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, []);
+  const initialState = {
+    list: [],
+    viewUniversity: null,
+  };
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -23,12 +32,25 @@ function App() {
     fetchData();
   }, []);
 
+  const handleItemClick = (univData) => {
+    dispatch({ type: "VIEW_UNIVERSITY", payload: univData });
+    navigate(`/${univData.domains[0]}`);
+  };
+
+  const handleItemDelete = (name) => {
+    dispatch({ type: "DELETE_UNIVERSITY", payload: name });
+    navigate("/");
+  };
+
   return (
     <div className="app">
-      <header className="header">
-        <h1>Universities List</h1>
-      </header>
-
+      <Routes>
+        <Route
+          index path="/"
+          element={<ListView list={state.list} onClickItem={handleItemClick} onDeleteItem={handleItemDelete} />}
+        />
+        <Route path="/:id" element={<DetailsView university={state.viewUniversity} />} />
+      </Routes>
     </div>
   );
 }
