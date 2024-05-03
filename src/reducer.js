@@ -14,6 +14,7 @@ export default function reducer(state, action) {
 
     case 'DELETE_UNIVERSITY':
       const restOfList = state.list.filter((uni) => uni.name !== action.payload);
+      localStorage.setItem('uniList', JSON.stringify(restOfList));
       return {
         ...state,
         list: restOfList,
