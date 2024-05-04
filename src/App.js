@@ -1,39 +1,14 @@
-import React, { useEffect, useReducer } from "react";
+import React from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import './styles/App.css';
-import reducer from "./reducer";
 import ListView from "./views/ListView";
 import DetailsView from "./views/DetailsView";
+import useList from "./hooks/useList";
 
 function App() {
-  const initialState = {
-    list: [],
-    viewUniversity: null,
-    loading: false,
-  };
-  const [state, dispatch] = useReducer(reducer, initialState);
-
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      dispatch({ type: "LOADING", payload: true });
-      let fetchedData = [];
-      const localList = JSON.parse(localStorage.getItem("uniList"));
-      if (localList) {
-        fetchedData = localList;
-      } else {
-        const response = await fetch("http://universities.hipolabs.com/search?country=United%20Arab%20Emirates");
-        const parsedData = await response.json();
-        localStorage.setItem("uniList", JSON.stringify(parsedData));
-        fetchedData = parsedData;
-      }
-      dispatch({ type: "INIT_DATA", payload: fetchedData });
-      dispatch({ type: "LOADING", payload: false });
-    }
-
-    fetchData();
-  }, []);
+  const [state, dispatch] = useList();
 
   const handleSearchList = (keyword) => {
     dispatch({ type: "LOADING", payload: true });
