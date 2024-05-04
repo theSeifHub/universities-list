@@ -3,7 +3,7 @@ import Title from '../components/Title';
 import ListTools from '../components/ListTools';
 
 function ListView({
-  list, onClickItem, onDeleteItem, onSearchList, onResetList, onSortList
+  list, onClickItem, onDeleteItem, onSearchList, onResetList, onSortList, isLoading
 }) {
 
   const handleDelete = (e, name) => {
@@ -19,21 +19,25 @@ function ListView({
 
       <ListTools onSearch={onSearchList} onSort={onSortList} onReset={onResetList} />
 
-      <ul className="list">
-        {
-          list.map((item) => (
+      {(!isLoading && list.length > 0) ? (
+        <ul className="list">
+          {list.map((item) => (
             <li key={item.domains[0]} className="list-item">
               <button type='button' className='item-btn' onClick={() => onClickItem(item)}>
                 <h2>{item.name}</h2>
               </button>
 
-              <button type='button' className='delete-btn' onClick={(e) => handleDelete(e, item.name)} title='Delete'>
-                X
-              </button>
+              <div className='delete-btn-container'>
+                <button type='button' className='delete-btn' onClick={(e) => handleDelete(e, item.name)} title='Delete'>
+                  X
+                </button>
+              </div>
             </li>
-          ))
-        }
-      </ul>
+          ))}
+        </ul>
+      ) : (
+        <p className='no-results-msg'>No results found.<br /> Search or Reset list for more results.</p>
+      )}
     </>
   )
 }

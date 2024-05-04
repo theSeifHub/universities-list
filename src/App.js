@@ -79,6 +79,7 @@ function App() {
                 onResetList={handleResetList}
                 onClickItem={handleItemClick}
                 onDeleteItem={handleItemDelete}
+                isLoading={state.loading}
               />
             }
           />
